@@ -47,11 +47,29 @@ app.post('/shopping-list', jsonParser, (req, res) => {
   res.status(201).json(item);
 });
 
+// code above this line works----------------------------
+
+//posting to this endpoint
+app.post('/recipes', jsonParser, (req, res) => {
+console.log('hello world');
+  const requiredFields = ['name' , 'ingredients'];
+  for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+const item = Recipes.create(req.body.name, req.body.ingredients);
+  res.status(201).json(item);
+});
 
 app.get('/recipes', (req, res) => {
   res.json(Recipes.get());
 })
 
 app.listen(process.env.PORT || 8080, () => {
-  console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
+  console.log(`Your app is listening hopefully on port ${process.env.PORT || 8080}`);
 });
